@@ -12,92 +12,43 @@ function App() {
 
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    fetch("http://127.0.0.1:8000/tasks/", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
   })
+
   return (
     <>
       <h1>
-        Hello world!
+        Add a new task
       </h1>
       <form onSubmit={onSubmit}>
-        <label htmlFor="name">
-          Name
+        <label htmlFor="title">
+          Task Tittle
         </label>
-        <input type="text" {...register("name", {
+        <input type="text" {...register("title", {
           required: {
             value: true,
-            message: "Name is required"
+            message: "Task title is required"
           }
         })} />
-        {errors.name && <span>{errors.name.message}</span>}
+        {errors.tittle && <span>{errors.tittle.message}</span>}
 
 
-        <label htmlFor="email">Email</label>
-        <input type="email" {...register("email", {
+        <label htmlFor="task">Task Description</label>
+        <input type="task" {...register("task", {
           required: {
             value: true,
-            message: "Email is required"
-          },
-          pattern: {
-            value: /^[a-z0-9._%+-]+@[a-z0-9]+\.[a-z]{2,4}$/,
-            message: 'Invalid email'
+            message: "Task description is required"
           }
         })} />
-        {errors.email && <span>{errors.email.message}</span>}
-
-
-        <label htmlFor="password">Password</label>
-        <input type="password" {...register("password", {
-          required: {
-            value: true,
-            message: "Password is required"
-          }
-        })} />
-        {errors.password && <span>{errors.password.message}</span>}
-
-        <label htmlFor="confirmPassword">Confirm password</label>
-        <input type="password" {...register("confirmPassword", {
-          required: {
-            value: true,
-            message: "Password is required"
-          },
-          validate: (value) => {
-            return value === watch("password") || "Passwords must be equals"
-          }
-        })} />
-        {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
-
-        <label htmlFor="birthDate">Birth Data</label>
-        <input type="date" {...register("birthDate", {
-          required: {
-            value: true,
-            message: "Birth date is required"
-          },
-          validate: (value) => {
-            console.log(value)
-            const birthDate = new Date(value)
-            const today = new Date()
-            const age = today.getFullYear() - birthDate.getFullYear()
-
-            return age <= 18 ? "Must be an adult" : true
-          }
-        })} />
-        {errors.birthDate && <span>{errors.birthDate.message}</span>}
-
-        <label htmlFor="country">Country</label>
-        <select {...register("country", {
-          required: {
-            value: true,
-            message: "Country is required"
-          },
-
-        })}>
-          <option value="co">Colombia</option>
-          <option value="mx">Mexico</option>
-        </select>
-        {errors.country && <span>{errors.country.message}</span>}
-
-        <button>Send Data</button>
+        {errors.task && <span>{errors.task.message}</span>}
+        <br />
+        <button>Send Task</button>
 
         <pre>
           {JSON.stringify(watch(), null, 2)}
