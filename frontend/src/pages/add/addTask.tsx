@@ -1,4 +1,4 @@
-import { AddForm } from "../components/AddForm"
+import { AddForm } from "../../components/AddForm"
 function AddTask() {
   return (
     <>
