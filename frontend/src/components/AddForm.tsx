@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form'
-
-
+import { useNavigate } from 'react-router-dom'
 export const AddForm = () => {
   const {
     register,
@@ -11,6 +10,7 @@ export const AddForm = () => {
     watch,
     reset,
   } = useForm()
+  const navigate = useNavigate();
 
 
   const onSubmit = handleSubmit((data) => {
@@ -20,9 +20,10 @@ export const AddForm = () => {
       body: JSON.stringify(data)
     })
       .then(response => response.json())
-      .then(data => console.log(data))
 
     reset()
+    navigate("/", { replace: true })
+
   })
   return <form onSubmit={onSubmit} >
     <label htmlFor="title">

@@ -7,17 +7,11 @@ const NavBar = () => {
         <NavLink to="/">
           Home
         </NavLink>
-        <NavLink to="/edit-task">
-          Edit Task
-        </NavLink>
         <NavLink to="/add-task">
           Add Task
         </NavLink>
-        <NavLink to="delete-task">
-          Delete Task
-        </NavLink>
       </NavMenu>
-    </Nav>
+    </Nav >
   );
 }
 
