@@ -1,19 +1,50 @@
 import { useEffect, useState } from "react";
 import { Table } from "../components/Table";
 
+
+
+const TableActions = ({ isEditing, setIsEditing }) => {
+
+  const handleEdition = () => {
+    setIsEditing(!isEditing)
+  }
+  const handleOk = () => {
+    setIsEditing(!isEditing)
+  }
+  const handleCancel = () => {
+    setIsEditing(!isEditing)
+  }
+
+  return (
+    <>
+      {isEditing ? null : <button onClick={handleEdition}>Edit</button>}
+      {
+        isEditing
+          ? (
+            <>
+              <button onClick={handleOk}>OK</button>
+              <button onClick={handleCancel}>cancel</button>
+            </>)
+          : null}
+    </>
+  )
+}
+
 const Home = () => {
   const [data, setState] = useState([])
   const [selectedItems, setSelectedItems] = useState({})
-
+  const [isEditing, setIsEditing] = useState(false)
+  const [deleted, setDeleted] = useState(false)
   const handleDeleted = () => {
     selectedItems.map((data) => {
       fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
         method: "DELETE",
-      })
+      }).then(
+        () => setDeleted((prev) => !prev)
+      )
     })
 
   }
-
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/tasks/", {
@@ -23,21 +54,38 @@ const Home = () => {
       .then((data) => {
         setState(data)
       })
-  }, [handleDeleted])
+
+    console.log(data)
+  }, [deleted])
 
 
   const columns = [
     {
       name: "Task",
-      selector: row => row.title
+      cell: row => (
+        <>{isEditing ? <input type="text" defaultValue={row.title} /> : row.title}</>
+      )
     },
     {
       name: "Description",
-      selector: row => row.task
+      cell: row => (
+        <>{isEditing ? <input type="text" defaultValue={row.task} /> : row.task}</>
+      )
     },
     {
       name: "State",
-      selector: row => row.state
+      cell: row => (
+        <>{isEditing ? <input type="text" defaultValue={row.state} /> : row.state}</>
+      )
+    },
+    {
+      name: "Actions",
+      cell: row => (
+        <TableActions
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
+      )
     },
   ]
 

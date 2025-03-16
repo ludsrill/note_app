@@ -47,6 +47,7 @@ export const AddForm = () => {
     })} />
     {errors.task && <span>{errors.task.message}</span>}
     <br />
+    <br />
     <button>Send Task</button>
 
     <pre>
