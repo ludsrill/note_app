@@ -3,23 +3,44 @@ import { Table } from "../components/Table";
 
 
 
-const TableActions = ({ isEditing, setIsEditing }) => {
+const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
+
 
   const handleEdition = () => {
-    setIsEditing(!isEditing)
+    setCurrentClick((prev) => [...prev, row])
   }
   const handleOk = () => {
-    setIsEditing(!isEditing)
+    setCurrentClick((prev) => [...prev].filter(value => value != row))
+
+    const inputTask = document.getElementById(`${row}Task`);
+    const inputDescription = document.getElementById(`${row}Description`);
+    const inputState = document.getElementById(`${row}State`);
+
+
+    const body = {
+      "id": row,
+      "title": inputTask.value,
+      "task": inputDescription.value,
+      "state": inputState.value
+    }
+
+    console.log(body)
+
+    fetch(`http://127.0.0.1:8000/tasks/${row}/`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(() => setOnUpdate((prev) => !prev))
+
   }
   const handleCancel = () => {
-    setIsEditing(!isEditing)
+    setCurrentClick((prev) => [...prev].filter(value => value != row))
   }
-
   return (
     <>
-      {isEditing ? null : <button onClick={handleEdition}>Edit</button>}
+      {currentClick.includes(row) ? null : <button onClick={handleEdition}>Edit</button>}
       {
-        isEditing
+        currentClick.includes(row)
           ? (
             <>
               <button onClick={handleOk}>OK</button>
@@ -33,14 +54,16 @@ const TableActions = ({ isEditing, setIsEditing }) => {
 const Home = () => {
   const [data, setState] = useState([])
   const [selectedItems, setSelectedItems] = useState({})
-  const [isEditing, setIsEditing] = useState(false)
-  const [deleted, setDeleted] = useState(false)
+  const [onUpdate, setOnUpdate] = useState(false)
+  const [currentClick, setCurrentClick] = useState([])
+
+
   const handleDeleted = () => {
     selectedItems.map((data) => {
       fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
         method: "DELETE",
       }).then(
-        () => setDeleted((prev) => !prev)
+        () => setOnUpdate((prev) => !prev)
       )
     })
 
@@ -55,35 +78,47 @@ const Home = () => {
         setState(data)
       })
 
-    console.log(data)
-  }, [deleted])
+  }, [onUpdate])
 
 
   const columns = [
     {
       name: "Task",
-      cell: row => (
-        <>{isEditing ? <input type="text" defaultValue={row.title} /> : row.title}</>
+      cell: row =>
+      (
+        <>{currentClick.includes(row.id) ? <input id={`${row.id}Task`} type="text" defaultValue={row.title} /> : row.title}</>
       )
+
     },
     {
       name: "Description",
       cell: row => (
-        <>{isEditing ? <input type="text" defaultValue={row.task} /> : row.task}</>
+        <>{currentClick.includes(row.id) ? <input id={`${row.id}Description`} type="text" defaultValue={row.task} /> : row.task}</>
       )
     },
     {
       name: "State",
       cell: row => (
-        <>{isEditing ? <input type="text" defaultValue={row.state} /> : row.state}</>
+        <>
+          {currentClick.includes(row.id) ?
+            <select id={`${row.id}State`} >
+              <option value="In progress">In progress</option>
+              <option value="Done">Done</option>
+              <option value="Pending" selected>Pending</option>
+
+            </select> : row.state}</>
       )
     },
     {
       name: "Actions",
       cell: row => (
         <TableActions
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
+          row={row.id}
+          currentClick={currentClick}
+          setCurrentClick={setCurrentClick}
+          setOnUpdate={setOnUpdate}
+
+
         />
       )
     },
