@@ -10,6 +10,9 @@ const NavBar = () => {
         <NavLink to="/add-task">
           Add Task
         </NavLink>
+        <NavLink to="/registration">
+          Registration
+        </NavLink>
       </NavMenu>
     </Nav >
   );
