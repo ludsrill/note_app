@@ -8,7 +8,7 @@ export function Registration() {
   const onSubmit = handleSubmit((data) => {
     if (data.password === data.repeat_password) {
 
-      fetch("http://127.0.0.1:8000/login/", {
+      fetch("http://127.0.0.1:8000/registration/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
