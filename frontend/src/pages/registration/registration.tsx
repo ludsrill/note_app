@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form"
-
+import { replace, useNavigate } from "react-router-dom"
 
 
 export function Registration() {
   const { register, handleSubmit } = useForm()
-
+  const navigate = useNavigate()
   const onSubmit = handleSubmit((data) => {
     if (data.password === data.repeat_password) {
 
@@ -19,7 +19,7 @@ export function Registration() {
           "last_name": data.last_name
         })
       })
-        .then(response => response.json())
+        .then(() => navigate("/login", { replace: true }))
     }
   })
 
