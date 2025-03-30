@@ -2,16 +2,23 @@ import { useForm } from "react-hook-form"
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm()
+  function getCsrfToken() {
+    return document.cookie
+      .split("; ")
+      .find(row => row.startsWith("csrftoken="))
+      ?.split("=")[1];
+  }
 
   const onSubmit = handleSubmit((data) => {
     fetch("http://localhost:8000/user/login/", {
       method: "POST",
-      headers: { "Content-type": "application/json" },
+      headers: { "X-CSRFToken": getCsrfToken(), "Content-type": "application/json", },
+      credentials: "include",
       body: JSON.stringify({
         "username": data["username"],
         "password": data["password"]
       })
-    }).then((response) => console.log(response))
+    })
 
   })
 

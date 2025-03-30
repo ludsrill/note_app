@@ -71,7 +71,8 @@ const Home = () => {
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/tasks/", {
-      method: "GET"
+      method: "GET",
+      headers: { "Authorization": `Token ${document.cookie}` }
     })
       .then((data) => data.json())
       .then((data) => {

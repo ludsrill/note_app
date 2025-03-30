@@ -4,6 +4,7 @@ from .serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
 
 
 class UserRegistrationCreateAPIView(generics.CreateAPIView):
@@ -35,5 +36,14 @@ class UserLoginAPIView(generics.CreateAPIView):
             return Response({"error": "Bad password"}, status.HTTP_400_BAD_REQUEST)
 
         token, _ = Token.objects.get_or_create(user=user)
-
-        return Response({"token": token.key}, status.HTTP_200_OK)
+        response = Response(
+            {
+                "token": token.key,
+            }
+        )
+        response.set_cookie(
+            key="task_cookie",
+            value=token.key,
+            max_age=3600,
+        )
+        return response
