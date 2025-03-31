@@ -43,7 +43,9 @@ class UserLoginAPIView(generics.CreateAPIView):
         )
         response.set_cookie(
             key="task_cookie",
+            secure=True,
             value=token.key,
             max_age=3600,
+            samesite=None,
         )
         return response

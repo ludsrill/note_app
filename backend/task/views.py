@@ -1,9 +1,12 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
 from .models import Task
 from .serializers import TaskSerializer
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+from rest_framework.request import Request
 
 
 class TaskListCreateAPIView(generics.ListCreateAPIView):
@@ -11,6 +14,26 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        tasks = Task.objects.filter(user=request.user)
+        serializer = self.get_serializer(tasks, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data["user"], str):
+            username = User.objects.get(username=request.data["user"])
+
+        serializer = TaskSerializer(
+            data={
+                "task": request.data["task"],
+                "title": request.data["title"],
+                "user": username.id,
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Success"}, status.HTTP_200_OK)
 
 
 class TaskRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):

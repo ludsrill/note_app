@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table } from "../components/Table";
-
-
+import { getToken } from "../utils/utils";
 
 const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
-
 
   const handleEdition = () => {
     setCurrentClick((prev) => [...prev, row])
@@ -72,7 +70,7 @@ const Home = () => {
   useEffect(() => {
     fetch("http://127.0.0.1:8000/tasks/", {
       method: "GET",
-      headers: { "Authorization": `Token ${document.cookie}` }
+      headers: { "Authorization": `Token ${getToken()}` }
     })
       .then((data) => data.json())
       .then((data) => {

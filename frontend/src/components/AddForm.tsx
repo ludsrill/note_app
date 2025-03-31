@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { getToken } from '../utils/utils'
+
 export const AddForm = () => {
   const {
     register,
@@ -12,12 +14,14 @@ export const AddForm = () => {
   } = useForm()
   const navigate = useNavigate();
 
-
   const onSubmit = handleSubmit((data) => {
     fetch("http://127.0.0.1:8000/tasks/", {
       method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Token ${getToken()}`
+      },
+      body: JSON.stringify({ ...data, user: "ludsrill" })
     })
       .then(response => response.json())
 
