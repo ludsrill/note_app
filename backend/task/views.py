@@ -16,19 +16,19 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        tasks = Task.objects.filter(user=request.user)
+        tasks = Task.objects.filter(username=request.user)
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        if isinstance(request.data["user"], str):
-            username = User.objects.get(username=request.data["user"])
+        if isinstance(request.data["username"], str):
+            username = User.objects.get(username=request.data["username"])
 
         serializer = TaskSerializer(
             data={
                 "task": request.data["task"],
                 "title": request.data["title"],
-                "user": username.id,
+                "username": username.id,
             }
         )
         serializer.is_valid(raise_exception=True)

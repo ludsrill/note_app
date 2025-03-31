@@ -1,6 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { getToken } from '../utils/utils'
+import { useContext } from 'react'
+import { AuthContext } from '../context/Authcontext'
+
+
 
 export const AddForm = () => {
   const {
@@ -13,6 +17,9 @@ export const AddForm = () => {
     reset,
   } = useForm()
   const navigate = useNavigate();
+  const { username } = useContext(AuthContext)
+
+
 
   const onSubmit = handleSubmit((data) => {
     fetch("http://127.0.0.1:8000/tasks/", {
@@ -21,7 +28,7 @@ export const AddForm = () => {
         'Content-Type': 'application/json',
         "Authorization": `Token ${getToken()}`
       },
-      body: JSON.stringify({ ...data, user: "ludsrill" })
+      body: JSON.stringify({ ...data, username: username })
     })
       .then(response => response.json())
 

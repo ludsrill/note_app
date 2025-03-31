@@ -8,7 +8,7 @@ class Task(models.Model):
         IN_PROGRESS = "In progress"
         DONE = "Done"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+    username = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     title = models.CharField(max_length=300)
     task = models.TextField(null=True)
     state = models.CharField(
