@@ -41,3 +41,20 @@ class TaskRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        if isinstance(request.data["username"], str):
+            username = User.objects.get(username=request.data["username"])
+
+        serializer = self.serializer_class(
+            data={
+                "username": username.id,
+                "title": request.data["title"],
+                "task": request.data["task"],
+                "state": request.data["state"],
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"message": "Sucess"}, status.HTTP_200_OK)

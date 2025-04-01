@@ -2,16 +2,18 @@ import { useForm } from "react-hook-form"
 import { getCsrfToken } from "../../utils/utils"
 import { useContext } from "react"
 import { AuthContext } from "../../context/Authcontext"
+import { getToken } from "../../utils/utils"
 export default function LoginPage() {
   const { register, handleSubmit } = useForm()
   const { username, dispatch } = useContext(AuthContext)
 
   const onSubmit = handleSubmit((data) => {
-    fetch("http://localhost:8000/user/login/", {
+    fetch("http://127.0.0.1:8000/user/login/", {
       method: "POST",
       headers: {
         "X-CSRFToken": getCsrfToken(),
         "Content-type": "application/json",
+        "Authorization": `Token ${getToken()}`
       },
       credentials: "include",
       body: JSON.stringify({

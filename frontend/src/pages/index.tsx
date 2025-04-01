@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Table } from "../components/Table";
 import { getToken } from "../utils/utils";
+import { AuthContext } from "../context/Authcontext";
 
 const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
-
+  const { username } = useContext(AuthContext)
   const handleEdition = () => {
     setCurrentClick((prev) => [...prev, row])
   }
@@ -19,14 +20,16 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
       "id": row,
       "title": inputTask.value,
       "task": inputDescription.value,
-      "state": inputState.value
+      "state": inputState.value,
+      "username": username
     }
-
-    console.log(body)
 
     fetch(`http://127.0.0.1:8000/tasks/${row}/`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${getToken()}`
+      },
       body: JSON.stringify(body)
     }).then(() => setOnUpdate((prev) => !prev))
 

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getToken } from '../utils/utils'
 import { useContext } from 'react'
 import { AuthContext } from '../context/Authcontext'
-
+import { getCsrfToken } from '../utils/utils'
 
 
 export const AddForm = () => {
@@ -26,8 +26,10 @@ export const AddForm = () => {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
+        "X-CSRFToken": getCsrfToken(),
         "Authorization": `Token ${getToken()}`
       },
+      credentials: 'include',
       body: JSON.stringify({ ...data, username: username })
     })
       .then(response => response.json())
