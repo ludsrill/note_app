@@ -26,32 +26,37 @@ export default function LoginPage() {
 
   return (
     <>
-      <h1>Login</h1>
-      {username
-        ? <h2>Logged user {username}</h2>
-        : <h2>Logged user None</h2>}
-      <form onSubmit={onSubmit}>
-        <label htmlFor="username">Username</label>
-        <input type="text" {...register("username", {
-          required: {
-            value: true,
-            message: "Username is required"
-          }
-        })} />
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 shadow-lg rounded-xl w-96">
+          <h1 className="text-2xl text-gray-700 font-bold text-center mb-8">Login</h1>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="username" className="block text-gray-700 font-medium">Username</label>
+              <input className="w-full px-3 py-0.25 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("username", {
+                required: {
+                  value: true,
+                  message: "Username is required"
+                }
+              })} />
+            </div>
 
-        <label htmlFor="password">
-          Password
-        </label>
-        <input type="text" {...register("password", {
-          required: {
-            value: true,
-            message: "Password required"
-          }
-        })} />
-        <br />
-        <button>Login</button>
+            <div>
+              <label htmlFor="password">
+                Password
+              </label>
+              <input className="w-full px-3 py-0.25 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {
+                required: {
+                  value: true,
+                  message: "Password required"
+                }
+              })} />
+            </div>
 
-      </form>
+            <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Login</button>
+
+          </form>
+        </div>
+      </div>
     </>
 
   )
