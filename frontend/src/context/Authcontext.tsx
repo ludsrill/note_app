@@ -30,34 +30,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [state.username])
 
-  useEffect(() => {
-    const fetching = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/tasks/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Token ${getToken()}`
-          }
-        })
-
-        if (!response.ok) {
-          dispatch({ type: "LOGOUT" })
-          localStorage.removeItem("username")
-
-        }
-      }
-      catch (error) {
-        dispatch({ type: "LOGOUT" })
-        localStorage.removeItem("username")
-      }
-    }
-    fetching()
-    const interval = setInterval(fetching, 300000)
-    return () => clearInterval(interval)
-
-  }, [])
-
   return (
     <AuthContext.Provider value={{ ...state, dispatch }}>
       {children}

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Table } from "../components/Table";
-import { getToken } from "../utils/utils";
+import { getCsrfToken, getToken } from "../utils/utils";
 import { AuthContext } from "../context/Authcontext";
 
 const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
@@ -63,6 +63,10 @@ const Home = () => {
     selectedItems.map((data) => {
       fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
         method: "DELETE",
+        headers: {
+          "X-CSRFtoken": getCsrfToken(),
+          "Authorization": `Token ${getToken()}`
+        }
       }).then(
         () => setOnUpdate((prev) => !prev)
       )
