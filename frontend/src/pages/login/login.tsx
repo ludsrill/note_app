@@ -3,9 +3,13 @@ import { getCsrfToken } from "../../utils/utils"
 import { useContext } from "react"
 import { AuthContext } from "../../context/Authcontext"
 import { getToken } from "../../utils/utils"
+import { useNavigate } from "react-router-dom"
+
+
 export default function LoginPage() {
   const { register, handleSubmit } = useForm()
   const { username, dispatch } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit((data) => {
     fetch("http://127.0.0.1:8000/user/login/", {
@@ -20,7 +24,9 @@ export default function LoginPage() {
         "username": data["username"],
         "password": data["password"]
       })
-    }).then(() => dispatch({ type: "LOGIN", payload: data["username"] }))
+    })
+      .then(() => dispatch({ type: "LOGIN", payload: data["username"] }))
+      .then(() => navigate("/"))
 
   })
 
@@ -41,7 +47,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password">
+              <label className="block text-gray-700 font-medium" htmlFor="password">
                 Password
               </label>
               <input className="w-full px-3 py-0.25 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {

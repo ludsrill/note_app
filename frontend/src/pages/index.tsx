@@ -39,13 +39,13 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
   }
   return (
     <>
-      {currentClick.includes(row) ? null : <button onClick={handleEdition}>Edit</button>}
+      {currentClick.includes(row) ? null : <button className="mr-3 text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleEdition}>Edit</button>}
       {
         currentClick.includes(row)
           ? (
             <>
-              <button onClick={handleOk}>OK</button>
-              <button onClick={handleCancel}>cancel</button>
+              <button className="mr-3 text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleOk}>OK</button>
+              <button className="text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleCancel}>cancel</button>
             </>)
           : null}
     </>
@@ -123,8 +123,6 @@ const Home = () => {
           currentClick={currentClick}
           setCurrentClick={setCurrentClick}
           setOnUpdate={setOnUpdate}
-
-
         />
       )
     },
@@ -134,10 +132,19 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Check your tasks!</h1>
-      <Table columns={columns} data={data} setItems={setSelectedItems} />
-      <button onClick={handleDeleted}>Delete tasks</button>
-    </div>
+      <h1 className="text-2xl text-gray-600 font-bold text-center mb-8 mt-8">Check your tasks!</h1>
+      <div>
+        <div className="ml-8">
+          <button
+            className="bg-gray-600 text-white p-2 py-1 text-white rounded-md hover:bg-gray-900 transition"
+            onClick={handleDeleted}>Delete tasks</button>
+        </div>
+        <div className="px-8 py-4">
+          <Table columns={columns} data={data} setItems={setSelectedItems} />
+        </div>
+      </div>
+
+    </div >
   );
 };
 
