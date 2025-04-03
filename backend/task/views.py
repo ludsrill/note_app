@@ -46,10 +46,9 @@ class TaskRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         if isinstance(request.data["username"], str):
             username = User.objects.get(username=request.data["username"])
 
-        task = Task.objects.get(id=request.data["id"])
         serializer = self.serializer_class(
             data={
-                "id": task.id,
+                "id": request.data["id"],
                 "username": username.id,
                 "title": request.data["title"],
                 "task": request.data["task"],
