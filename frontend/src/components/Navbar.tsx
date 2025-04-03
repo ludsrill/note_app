@@ -1,14 +1,18 @@
 import { useContext } from "react";
-import { NavLink as Link } from "react-router-dom";
+import { NavLink as Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/Authcontext";
-import { BiExit } from "react-icons/bi";
+import { LuLogOut } from "react-icons/lu";
 
 const NavBar = () => {
   const { username, dispatch } = useContext(AuthContext)
   const path = window.location.href.split("/")
   const isLogin = path ? path.pop() === "login" : false
+  const navigate = useNavigate()
   const handleLogout = () => {
     dispatch({ "type": "LOGOUT" })
+  }
+  const handleLogin = () => {
+    navigate("/login")
   }
 
   return (
@@ -21,18 +25,21 @@ const NavBar = () => {
           <Link to="/add-task" className="text-gray-700 hover:underline">
             Add Task
           </Link>
-          <Link to="/registration" className="text-gray-700 hover:underline">
-            Registration
-          </Link>
         </nav>
-        {username && (
+        {username ? (
           <div className="flex mr-4 items-center">
             <div className="text-md text-gray-700 font-semibold mr-2">
               {username}
             </div>
-            <button onClick={handleLogout}><BiExit /></button>
+            <button onClick={handleLogout}><LuLogOut /></button>
           </div>
-        )}
+        ) : <div className="flex items-center  mr-4">
+          <button className="flex items-center text-md text-gray-700 font-semibold mr-1" onClick={handleLogin}>
+            Login
+          </button>
+
+        </div>
+        }
 
       </div>
     ) : null

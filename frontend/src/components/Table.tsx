@@ -74,7 +74,7 @@ export const Table = ({ columns, data, setItems }) => {
         selectableRows
         onSelectedRowsChange={handleSelection}
         customStyles={customStyles}
-        pagination={data.lenght >= 1 ? true : false}
+        pagination={data.length >= 1 ? true : false}
       />
     </>
 

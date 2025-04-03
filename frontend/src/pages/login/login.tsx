@@ -38,7 +38,7 @@ export default function LoginPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
               <label htmlFor="username" className="block text-gray-700 font-medium">Username</label>
-              <input className="w-full px-3 py-0.25 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("username", {
+              <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("username", {
                 required: {
                   value: true,
                   message: "Username is required"
@@ -50,7 +50,7 @@ export default function LoginPage() {
               <label className="block text-gray-700 font-medium" htmlFor="password">
                 Password
               </label>
-              <input className="w-full px-3 py-0.25 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {
+              <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {
                 required: {
                   value: true,
                   message: "Password required"
@@ -61,7 +61,9 @@ export default function LoginPage() {
             <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Login</button>
 
           </form>
+          <a href="/registration" className="mt-2 block text-blue-700 text-right underline"> Create an account </a>
         </div>
+
       </div>
     </>
 

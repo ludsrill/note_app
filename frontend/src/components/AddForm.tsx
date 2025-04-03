@@ -39,33 +39,32 @@ export const AddForm = () => {
 
   })
   return <form onSubmit={onSubmit} >
-    <label htmlFor="title">
-      Task Tittle
-    </label>
-    <input type="text" {...register("title", {
-      required: {
-        value: true,
-        message: "Task title is required"
-      }
-    })} />
-    {errors.tittle && <span>{errors.tittle.message}</span>}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 shadow-lg rounded-xl w-96">
+        <h1 className="text-2xl text-gray-700 font-bold text-center mb-8">
+          Add a new task
+        </h1>
+        <label className="block text-gray-600 font-medium" htmlFor="title">
+          Task Tittle
+        </label>
+        <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500 mb-4" type="text" {...register("title", {
+          required: {
+            value: true,
+            message: "Task title is required"
+          }
+        })} />
+        {errors.tittle && <span>{errors.tittle.message}</span>}
 
-
-    <label htmlFor="task">Task Description</label>
-    <input type="task" {...register("task", {
-      required: {
-        value: true,
-        message: "Task description is required"
-      }
-    })} />
-    {errors.task && <span>{errors.task.message}</span>}
-    <br />
-    <br />
-    <button>Send Task</button>
-
-    <pre>
-      {JSON.stringify(watch(), null, 2)}
-    </pre>
-
+        <label className="block text-gray-600 font-medium" htmlFor="task">Task Description</label>
+        <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500 mb-4" type="text" {...register("task", {
+          required: {
+            value: true,
+            message: "Task description is required"
+          }
+        })} />
+        {errors.task && <span>{errors.task.message}</span>}
+        <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Send Task</button>
+      </div>
+    </div>
   </form >
 }

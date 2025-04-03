@@ -25,73 +25,78 @@ export function Registration() {
 
 
   return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="first_name">
-        First Name
-      </label>
-      <input type="text" {...register("first_name", {
-        required: {
-          value: true,
-          message: "First Name is required"
-        }
-      })} />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 shadow-lg rounded-xl w-96">
+        <h1 className="text-2xl text-gray-700 font-bold text-center mb-8">Registration</h1>
+        <form onSubmit={onSubmit}>
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="first_name">
+            First Name
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("first_name", {
+            required: {
+              value: true,
+              message: "First Name is required"
+            }
+          })} />
 
-      <label htmlFor="last_name">
-        Last Name
-      </label>
-      <input type="text" {...register("last_name", {
-        required: {
-          value: true,
-          message: "Last Name is required"
-        }
-      })} />
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="last_name">
+            Last Name
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("last_name", {
+            required: {
+              value: true,
+              message: "Last Name is required"
+            }
+          })} />
 
-      <label htmlFor="username">
-        Username
-      </label>
-      <input type="text" {...register("username", {
-        required: {
-          value: true,
-          message: "Username is required"
-        }
-      })} />
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="username">
+            Username
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("username", {
+            required: {
+              value: true,
+              message: "Username is required"
+            }
+          })} />
 
-      <label htmlFor="email">
-        Email
-      </label>
-      <input type="text" {...register("email", {
-        required: {
-          value: true,
-          message: "Email is required"
-        }
-      })} />
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="email">
+            Email
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("email", {
+            required: {
+              value: true,
+              message: "Email is required"
+            }
+          })} />
 
-      <label htmlFor="password">
-        Password
-      </label>
-      <input type="text" {...register("password", {
-        required: {
-          value: true,
-          message: "Password is required"
-        }
-      })} />
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="password">
+            Password
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {
+            required: {
+              value: true,
+              message: "Password is required"
+            }
+          })} />
 
-      <label htmlFor="repeat-password">
-        Repeat password
-      </label>
-      <input type="text" {...register("repeat_password", {
-        required: {
-          value: true,
-          message: "Repeat the password"
-        }
-      })} />
+          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="repeat-password">
+            Repeat password
+          </label>
+          <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("repeat_password", {
+            required: {
+              value: true,
+              message: "Repeat the password"
+            }
+          })} />
 
-      <br />
-      <br />
-      <button>Send Task</button>
+          <br />
+          <br />
+          <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Register</button>
 
 
-    </form>
+        </form>
+      </div>
+    </div>
   )
 
 
