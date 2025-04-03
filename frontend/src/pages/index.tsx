@@ -92,14 +92,14 @@ const Home = () => {
       name: "Task",
       cell: row =>
       (
-        <>{currentClick.includes(row.id) ? <input id={`${row.id}Task`} type="text" defaultValue={row.title} /> : row.title}</>
+        <>{currentClick.includes(row.id) ? <input className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Task`} type="text" defaultValue={row.title} /> : row.title}</>
       )
 
     },
     {
       name: "Description",
       cell: row => (
-        <>{currentClick.includes(row.id) ? <input id={`${row.id}Description`} type="text" defaultValue={row.task} /> : row.task}</>
+        <>{currentClick.includes(row.id) ? <input className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Description`} type="text" defaultValue={row.task} /> : row.task}</>
       )
     },
     {
@@ -107,7 +107,7 @@ const Home = () => {
       cell: row => (
         <>
           {currentClick.includes(row.id) ?
-            <select id={`${row.id}State`} >
+            <select defaultValue={row.state} className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}State`} >
               <option value="In progress">In progress</option>
               <option value="Done">Done</option>
               <option value="Pending" selected>Pending</option>
