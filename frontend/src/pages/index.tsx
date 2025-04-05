@@ -8,6 +8,9 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
   const handleEdition = () => {
     setCurrentClick((prev) => [...prev, row])
   }
+  const handleCancel = () => {
+    setCurrentClick((prev) => [...prev].filter(value => value != row))
+  }
   const handleOk = () => {
     setCurrentClick((prev) => [...prev].filter(value => value != row))
 
@@ -34,9 +37,7 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
     }).then(() => setOnUpdate((prev) => !prev))
 
   }
-  const handleCancel = () => {
-    setCurrentClick((prev) => [...prev].filter(value => value != row))
-  }
+
   return (
     <>
       {currentClick.includes(row) ? null : <button className="mr-3 text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleEdition}>Edit</button>}

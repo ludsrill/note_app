@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserRegistrationCreateAPIView(generics.CreateAPIView):
@@ -30,10 +31,13 @@ class UserLoginAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.data["username"])
+        try:
+            user = User.objects.get(username=request.data["username"])
+        except ObjectDoesNotExist:
+            return Response({"error": "Bad password"}, status.HTTP_401_UNAUTHORIZED)
 
         if not user.check_password(request.data["password"]):
-            return Response({"error": "Bad password"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Bad password"}, status.HTTP_401_UNAUTHORIZED)
 
         token, _ = Token.objects.get_or_create(user=user)
         response = Response(

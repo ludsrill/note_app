@@ -1,23 +1,23 @@
 import { useForm } from "react-hook-form"
 import { getCsrfToken } from "../../utils/utils"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { AuthContext } from "../../context/Authcontext"
-import { getToken } from "../../utils/utils"
 import { useNavigate } from "react-router-dom"
+import FloatingMessage from "../../components/FloatingText"
 
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm()
   const { username, dispatch } = useContext(AuthContext)
+  const [loginState, setLoginState] = useState(0)
   const navigate = useNavigate()
 
-  const onSubmit = handleSubmit((data) => {
-    fetch("http://127.0.0.1:8000/user/login/", {
+  const onSubmit = handleSubmit(async (data) => {
+    const response = await fetch("http://127.0.0.1:8000/user/login/", {
       method: "POST",
       headers: {
         "X-CSRFToken": getCsrfToken(),
         "Content-type": "application/json",
-        "Authorization": `Token ${getToken()}`
       },
       credentials: "include",
       body: JSON.stringify({
@@ -25,10 +25,18 @@ export default function LoginPage() {
         "password": data["password"]
       })
     })
-      .then(() => dispatch({ type: "LOGIN", payload: data["username"] }))
-      .then(() => navigate("/"))
 
+    if (response.ok) {
+      dispatch({ type: "LOGIN", payload: data["username"] })
+      navigate("/")
+      setLoginState(0)
+    }
+    else {
+      console.log(loginState)
+      setLoginState((prev) => prev + 1)
+    }
   })
+
 
   return (
     <>
@@ -65,6 +73,8 @@ export default function LoginPage() {
         </div>
 
       </div>
+      {loginState > 0 && <FloatingMessage key={loginState} />}
+
     </>
 
   )

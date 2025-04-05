@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { replace, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 export function Registration() {
