@@ -56,7 +56,8 @@ class TaskRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
             }
         )
 
+        task = Task.objects.filter(id=request.data["id"])
         serializer.is_valid(raise_exception=True)
-        Task.objects.update(**serializer.validated_data)
+        task.update(**serializer.validated_data)
 
         return Response({"message": "Sucess"}, status.HTTP_200_OK)
