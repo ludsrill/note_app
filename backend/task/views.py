@@ -16,6 +16,7 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
+        print(request.user)
         tasks = Task.objects.filter(username=request.user)
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
