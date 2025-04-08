@@ -17,6 +17,8 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
     const inputTask = document.getElementById(`${row}Task`);
     const inputDescription = document.getElementById(`${row}Description`);
     const inputState = document.getElementById(`${row}State`);
+    const inputPriority = document.getElementById(`${row}Priority`);
+
 
 
     const body = {
@@ -24,6 +26,7 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
       "title": inputTask.value,
       "task": inputDescription.value,
       "state": inputState.value,
+      "priority": inputPriority.value,
       "username": username
     }
 
@@ -114,6 +117,19 @@ const Home = () => {
               <option value="Pending" selected>Pending</option>
 
             </select> : row.state}</>
+      )
+    },
+    {
+      name: "Priority",
+      cell: row => (
+        <>
+          {currentClick.includes(row.id) ?
+            <select defaultValue={row.priority} className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Priority`} >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low" selected>Low</option>
+
+            </select> : row.priority}</>
       )
     },
     {
