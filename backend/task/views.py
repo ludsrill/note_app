@@ -21,16 +21,8 @@ class TaskListCreateAPIView(generics.ListCreateAPIView, generics.GenericAPIView)
     permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
 
-    def list(self, request, *args, **kwargs):
-        tasks = Task.objects.filter(username=request.user)
-
-        page = self.paginate_queryset(tasks)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(tasks, many=True)
-        return Response(serializer.data, status.HTTP_200_OK)
+    def get_queryset(self):
+        return Task.objects.filter(username=self.request.user)
 
     def create(self, request, *args, **kwargs):
         if isinstance(request.data["username"], str):
