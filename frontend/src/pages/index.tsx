@@ -79,13 +79,13 @@ const Home = () => {
   }
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/tasks/", {
+    fetch("http://127.0.0.1:8000/tasks/?page=1", {
       method: "GET",
       headers: { "Authorization": `Token ${getToken()}` }
     })
       .then((data) => data.json())
       .then((data) => {
-        setState(data)
+        setState(data["results"])
       })
 
   }, [onUpdate])

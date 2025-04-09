@@ -9,12 +9,12 @@ from django.contrib.auth.models import User
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 5
     page_size_query_param = "page_size"
-    max_page_size = 10
+    max_page_size = 5
 
 
-class TaskListCreateAPIView(generics.ListCreateAPIView):
+class TaskListCreateAPIView(generics.ListCreateAPIView, generics.GenericAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     authentication_classes = [TokenAuthentication]
@@ -23,6 +23,12 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         tasks = Task.objects.filter(username=request.user)
+
+        page = self.paginate_queryset(tasks)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
