@@ -2,11 +2,16 @@ from rest_framework import generics, mixins, status
 from .models import Task
 from .serializers import TaskSerializer
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-from rest_framework.request import Request
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "page_size"
+    max_page_size = 10
 
 
 class TaskListCreateAPIView(generics.ListCreateAPIView):
@@ -14,6 +19,7 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
 
     def list(self, request, *args, **kwargs):
         tasks = Task.objects.filter(username=request.user)
