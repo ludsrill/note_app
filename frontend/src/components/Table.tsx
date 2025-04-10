@@ -1,10 +1,38 @@
-import { useState } from "react";
 import DataTable from "react-data-table-component";
+import { useState, useEffect } from "react";
+import { getToken } from "../utils/utils";
 
-export const Table = ({ columns, data, setItems }) => {
+export const Table = ({ columns, setItems }) => {
   const handleSelection = (data) => {
     setItems(data.selectedRows)
   }
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [totalRows, setTotalRows] = useState(0);
+
+  const fetchUsers = async page => {
+    setLoading(true);
+    await fetch(`http://127.0.0.1:8000/tasks/?page=${page}`, {
+      method: "GET",
+      headers: { "Authorization": `Token ${getToken()}` }
+    }).then((response) => response.json())
+      .then((response) => {
+        console.log(response["count"])
+        setData(response["results"]);
+        setTotalRows(response["count"]);
+      })
+
+    setLoading(false);
+  };
+  const handlePageChange = page => {
+    fetchUsers(page);
+  };
+
+
+  useEffect(() => {
+    fetchUsers(1); // fetch page 1 of users
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const customStyles = {
     header: {
@@ -74,7 +102,13 @@ export const Table = ({ columns, data, setItems }) => {
         selectableRows
         onSelectedRowsChange={handleSelection}
         customStyles={customStyles}
-        pagination={data.length >= 1 ? true : false}
+        progressPending={loading}
+        pagination
+        paginationServer
+        paginationPerPage={5}
+        paginationTotalRows={totalRows}
+        onChangePage={handlePageChange}
+        paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 50]}
       />
     </>
 

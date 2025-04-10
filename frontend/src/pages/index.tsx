@@ -57,7 +57,6 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
 }
 
 const Home = () => {
-  const [data, setState] = useState([])
   const [selectedItems, setSelectedItems] = useState({})
   const [onUpdate, setOnUpdate] = useState(false)
   const [currentClick, setCurrentClick] = useState([])
@@ -78,17 +77,7 @@ const Home = () => {
 
   }
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/tasks/?page=1", {
-      method: "GET",
-      headers: { "Authorization": `Token ${getToken()}` }
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setState(data["results"])
-      })
 
-  }, [onUpdate])
 
 
   const columns = [
@@ -157,7 +146,7 @@ const Home = () => {
             onClick={handleDeleted}>Delete tasks</button>
         </div>
         <div className="px-8 py-4">
-          <Table columns={columns} data={data} setItems={setSelectedItems} />
+          <Table columns={columns} setItems={setSelectedItems} />
         </div>
       </div>
 
