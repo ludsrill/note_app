@@ -12,4 +12,17 @@ const RedirectLogin = ({ children }) => {
   return children
 
 }
-export default RedirectLogin
+
+const RedirectNoLogin = ({ children }) => {
+  const { username } = useContext(AuthContext)
+
+  if (!username) {
+    return <Navigate to="/" replace />
+  }
+  return children
+
+}
+export {
+  RedirectLogin,
+  RedirectNoLogin,
+}

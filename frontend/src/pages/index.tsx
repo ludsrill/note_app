@@ -16,7 +16,7 @@ const Home = () => {
         <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
           <h2 className="text-2xl font-semibold mb-6">Welcome to your personal task manager</h2>
           <p className="mb-6 text-gray-600">
-            Login or Register to begin to organice your daily activities
+            Login or Register to start organizing your daily activities
           </p>
           <div className="flex justify-center space-x-4">
             <button onClick={() => { navigate("/login") }} className="bg-sky-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl">

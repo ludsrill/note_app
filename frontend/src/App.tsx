@@ -7,14 +7,17 @@ import Home from "./pages/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/Navbar";
 
-import RedirectLogin from "./pages/login/redirectIsAuthenticated";
+import { RedirectLogin, RedirectNoLogin } from "./pages/login/redirectIsAuthenticated";
 function App() {
   return (
     <Router>
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/list" element={<ListTasks />} />
+        <Route path="/list" element={
+          <RedirectNoLogin>
+            <ListTasks />
+          </RedirectNoLogin>} />
         <Route path="/add-task" element={<AddTask />} />
         <Route path="/registration" element={
           <RedirectLogin>

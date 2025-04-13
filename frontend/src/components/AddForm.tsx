@@ -34,7 +34,7 @@ export const AddForm = () => {
       .then(response => response.json())
 
     reset()
-    navigate("/", { replace: true })
+    navigate("/list", { replace: true })
 
   })
   return <form onSubmit={onSubmit} >
