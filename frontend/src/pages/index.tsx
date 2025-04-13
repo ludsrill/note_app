@@ -1,157 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import { Table } from "../components/Table";
-import { getCsrfToken, getToken } from "../utils/utils";
-import { AuthContext } from "../context/Authcontext";
-
-const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
-  const { username } = useContext(AuthContext)
-  const handleEdition = () => {
-    setCurrentClick((prev) => [...prev, row])
-  }
-  const handleCancel = () => {
-    setCurrentClick((prev) => [...prev].filter(value => value != row))
-  }
-  const handleOk = () => {
-    setCurrentClick((prev) => [...prev].filter(value => value != row))
-
-    const inputTask = document.getElementById(`${row}Task`);
-    const inputDescription = document.getElementById(`${row}Description`);
-    const inputState = document.getElementById(`${row}State`);
-    const inputPriority = document.getElementById(`${row}Priority`);
-
-
-
-    const body = {
-      "id": row,
-      "title": inputTask.value,
-      "task": inputDescription.value,
-      "state": inputState.value,
-      "priority": inputPriority.value,
-      "username": username
-    }
-
-    fetch(`http://127.0.0.1:8000/tasks/${row}/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Token ${getToken()}`
-      },
-      body: JSON.stringify(body)
-    }).then(() => setOnUpdate((prev) => !prev))
-
-  }
-
-  return (
-    <>
-      {currentClick.includes(row) ? null : <button className="mr-3 text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleEdition}>Edit</button>}
-      {
-        currentClick.includes(row)
-          ? (
-            <>
-              <button className="mr-3 text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleOk}>OK</button>
-              <button className="text-right bg-gray-600 text-white p-2 py-1 text-white rounded-sm hover:bg-gray-900 transition" onClick={handleCancel}>cancel</button>
-            </>)
-          : null}
-    </>
-  )
-}
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [selectedItems, setSelectedItems] = useState({})
-  const [onUpdate, setOnUpdate] = useState(false)
-  const [currentClick, setCurrentClick] = useState([])
-
-
-  const handleDeleted = () => {
-    selectedItems.map((data) => {
-      fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
-        method: "DELETE",
-        headers: {
-          "X-CSRFtoken": getCsrfToken(),
-          "Authorization": `Token ${getToken()}`
-        }
-      }).then(
-        () => setOnUpdate((prev) => !prev)
-      )
-    })
-
-  }
-
-
-
-
-  const columns = [
-    {
-      name: "Task",
-      cell: row =>
-      (
-        <>{currentClick.includes(row.id) ? <input className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Task`} type="text" defaultValue={row.title} /> : row.title}</>
-      )
-
-    },
-    {
-      name: "Description",
-      cell: row => (
-        <>{currentClick.includes(row.id) ? <input className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Description`} type="text" defaultValue={row.task} /> : row.task}</>
-      )
-    },
-    {
-      name: "State",
-      cell: row => (
-        <>
-          {currentClick.includes(row.id) ?
-            <select defaultValue={row.state} className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}State`} >
-              <option value="In progress">In progress</option>
-              <option value="Done">Done</option>
-              <option value="Pending" selected>Pending</option>
-
-            </select> : row.state}</>
-      )
-    },
-    {
-      name: "Priority",
-      cell: row => (
-        <>
-          {currentClick.includes(row.id) ?
-            <select defaultValue={row.priority} className="w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" id={`${row.id}Priority`} >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low" selected>Low</option>
-
-            </select> : row.priority}</>
-      )
-    },
-    {
-      name: "Actions",
-      cell: row => (
-        <TableActions
-          row={row.id}
-          currentClick={currentClick}
-          setCurrentClick={setCurrentClick}
-          setOnUpdate={setOnUpdate}
-        />
-      )
-    },
-  ]
-
-
+  const navigate = useNavigate()
 
   return (
-    <div>
-      <h1 className="text-2xl text-gray-600 font-bold text-center mb-8 mt-8">Check your tasks!</h1>
-      <div>
-        <div className="ml-8">
-          <button
-            className="bg-gray-600 text-white p-2 py-1 text-white rounded-md hover:bg-gray-900 transition"
-            onClick={handleDeleted}>Delete tasks</button>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <header className="bg-sky-600 text-white py-8 shadow-md">
+        <div className="container mx-auto mb-6 px-4 text-center -mt-6">
+          <h1 className="text-4xl font-bold mb-2">TaskManager</h1>
+          <p className="text-lg">Organice your day, conquest your dreams</p>
         </div>
-        <div className="px-8 py-4">
-          <Table columns={columns} setItems={setSelectedItems} />
-        </div>
-      </div>
+      </header>
 
+      <main className="flex-grow flex items-center justify-center">
+        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+          <h2 className="text-2xl font-semibold mb-6">Welcome to your personal task manager</h2>
+          <p className="mb-6 text-gray-600">
+            Login or Register to begin to organice your daily activities
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button onClick={() => { navigate("/login") }} className="bg-sky-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl">
+              Login
+            </button>
+            <button onClick={() => { navigate("/registration") }} variant="outline" className="px-6 py-2 rounded-xl hover:bg-gray-200">
+              Register
+            </button>
+          </div>
+        </div>
+      </main >
+
+      < footer className="text-center text-gray-500 py-4 text-sm" >
+        © 2025 TaskMaster. All rights reserved.
+      </footer >
     </div >
   );
-};
-
-export default Home;
+}
+export default Home

@@ -27,9 +27,9 @@ export function Registration() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 shadow-lg rounded-xl w-96">
-        <h1 className="text-2xl text-gray-700 font-bold text-center mb-8">Registration</h1>
+        <h1 className="text-2xl font-bold text-center mb-8">Registration</h1>
         <form onSubmit={onSubmit}>
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="first_name">
+          <label className="block  font-medium" htmlFor="task" htmlFor="first_name">
             First Name
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("first_name", {
@@ -39,7 +39,7 @@ export function Registration() {
             }
           })} />
 
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="last_name">
+          <label className="block  font-medium" htmlFor="task" htmlFor="last_name">
             Last Name
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("last_name", {
@@ -49,7 +49,7 @@ export function Registration() {
             }
           })} />
 
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="username">
+          <label className="block  font-medium" htmlFor="task" htmlFor="username">
             Username
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("username", {
@@ -59,7 +59,7 @@ export function Registration() {
             }
           })} />
 
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="email">
+          <label className="block  font-medium" htmlFor="task" htmlFor="email">
             Email
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("email", {
@@ -69,7 +69,7 @@ export function Registration() {
             }
           })} />
 
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="password">
+          <label className="block  font-medium" htmlFor="task" htmlFor="password">
             Password
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("password", {
@@ -79,7 +79,7 @@ export function Registration() {
             }
           })} />
 
-          <label className="block text-gray-600 font-medium" htmlFor="task" htmlFor="repeat-password">
+          <label className="block  font-medium" htmlFor="task" htmlFor="repeat-password">
             Repeat password
           </label>
           <input className="w-full px-3 py-0.5 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500" type="text" {...register("repeat_password", {
@@ -91,7 +91,7 @@ export function Registration() {
 
           <br />
           <br />
-          <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Register</button>
+          <button className="mt-2 w-full bg-sky-600 text-white py-1 rounded-xl hover:bg-blue-700 transition">Register</button>
 
 
         </form>

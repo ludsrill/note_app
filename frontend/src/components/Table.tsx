@@ -48,8 +48,8 @@ export const Table = ({ columns, setItems }) => {
         borderTopStyle: 'solid',
         borderTopWidth: '1px',
         borderTopColor: "gray",
-        background: "#ebebeb",
-        color: "gray",
+        background: "oklch(58.8% 0.158 241.966)",
+        color: "white",
       },
     },
     headCells: {
@@ -77,6 +77,21 @@ export const Table = ({ columns, setItems }) => {
           borderBottomWidth: '1px',
           borderBottomColor: "gray",
           borderRadius: "8px",
+        },
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: '#f3f4f6',
+        color: 'black',
+      },
+      pageButtonsStyle: {
+        fill: 'black',
+        '&:hover': {
+          backgroundColor: 'black',
+        },
+        '&:disabled': {
+          fill: 'gray',
         },
       },
     },

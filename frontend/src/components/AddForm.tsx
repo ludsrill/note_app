@@ -62,7 +62,7 @@ export const AddForm = () => {
           }
         })} />
         {errors.task && <span>{errors.task.message}</span>}
-        <button className="mt-2 w-full bg-gray-800 text-white py-1 rounded-sm hover:bg-gray-900 transition">Send Task</button>
+        <button className="mt-2 w-full bg-sky-600 text-white py-1 rounded-sm hover:bg-blue-700 transition">Send Task</button>
       </div>
     </div>
   </form >
