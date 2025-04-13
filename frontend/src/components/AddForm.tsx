@@ -13,7 +13,6 @@ export const AddForm = () => {
     formState: {
       errors
     },
-    watch,
     reset,
   } = useForm()
   const navigate = useNavigate();
