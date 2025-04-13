@@ -6,7 +6,9 @@ import { LuLogOut } from "react-icons/lu";
 const NavBar = () => {
   const { username, dispatch } = useContext(AuthContext)
   const path = window.location.href.split("/")
-  const isLogin = path ? path.pop() === "login" : false
+  const currentPath = path.pop()
+  const isLogin = currentPath === "login"
+  const isList = currentPath === "list"
   const navigate = useNavigate()
   const handleLogout = () => {
     dispatch({ "type": "LOGOUT" })
@@ -19,15 +21,14 @@ const NavBar = () => {
     !isLogin ? (
       <div className="flex items-center justify-between py-4 bg-sky-600 shadow-md w-full">
 
-        <nav className="flex space-x-4 ml-8">
+        {!isList ? <nav className="flex space-x-4 ml-8">
           <Link to="/list" className="text-white hover:underline">
             Home
           </Link>
-
-        </nav>
+        </nav> : null}
 
         {username ? (
-          <div className="flex items-center ml-auto mr-4">
+          <div className="flex items-center ml-auto mr-8">
             <div className="text-md text-white font-semibold mr-2">
               {username}
             </div>

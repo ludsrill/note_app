@@ -7,7 +7,7 @@ import Home from "./pages/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/Navbar";
 
-
+import RedirectLogin from "./pages/login/redirectIsAuthenticated";
 function App() {
   return (
     <Router>
@@ -16,8 +16,17 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<ListTasks />} />
         <Route path="/add-task" element={<AddTask />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/registration" element={
+          <RedirectLogin>
+            <Registration />
+          </RedirectLogin>
+        }
+        />
+        <Route path="/login" element={
+          <RedirectLogin>
+            <LoginPage />
+          </RedirectLogin>}
+        />
       </Routes>
     </Router>
   )

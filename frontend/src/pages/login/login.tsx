@@ -10,7 +10,9 @@ export default function LoginPage() {
   const { register, handleSubmit } = useForm()
   const { username, dispatch } = useContext(AuthContext)
   const [loginState, setLoginState] = useState(0)
+  console.log(username)
   const navigate = useNavigate()
+
 
   const onSubmit = handleSubmit(async (data) => {
     const response = await fetch("http://127.0.0.1:8000/user/login/", {
