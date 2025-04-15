@@ -8,7 +8,7 @@ const Home = () => {
       <header className="bg-sky-600 text-white py-8 shadow-md">
         <div className="container mx-auto mb-6 px-4 text-center -mt-6">
           <h1 className="text-4xl font-bold mb-2">TaskManager</h1>
-          <p className="text-lg">Organice your day, conquest your dreams</p>
+          <p className="text-lg">Organice your day</p>
         </div>
       </header>
 
