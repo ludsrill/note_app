@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 
-const FloatingMessage = () => {
+const FloatingMessage = (): ReactElement | null => {
   const [show, setShow] = useState(true)
 
   useEffect(() => {
