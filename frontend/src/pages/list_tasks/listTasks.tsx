@@ -1,128 +1,168 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, ReactElement } from 'react'
 import { Table } from '../../components/Table'
 import { getCsrfToken, getToken } from '../../utils/utils'
 import { AuthContext } from '../../context/Authcontext'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
+const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }): ReactElement => {
   const { username } = useContext(AuthContext)
-  const handleEdition = () => {
+  const handleEdition = (): void => {
     setCurrentClick((prev) => [...prev, row])
   }
-  const handleCancel = () => {
-    setCurrentClick((prev) => [...prev].filter(value => value != row))
+  const handleCancel = (): void => {
+    setCurrentClick((prev) => [...prev].filter(value => value !== row))
   }
-  const handleOk = () => {
-    setCurrentClick((prev) => [...prev].filter(value => value != row))
+  const handleOk = async (): Promise<void> => {
+    setCurrentClick((prev) => [...prev].filter(value => value !== row))
 
-    const inputTask = document.getElementById(`${row}Task`)
-    const inputDescription = document.getElementById(`${row}Description`)
-    const inputState = document.getElementById(`${row}State`)
-    const inputPriority = document.getElementById(`${row}Priority`)
+    if (typeof row === 'number') {
+      const inputTask = document.getElementById(`${row}Task`)
+      const inputDescription = document.getElementById(`${row}Description`)
+      const inputState = document.getElementById(`${row}State`)
+      const inputPriority = document.getElementById(`${row}Priority`)
 
-    const body = {
-      id: row,
-      title: inputTask.value,
-      task: inputDescription.value,
-      state: inputState.value,
-      priority: inputPriority.value,
-      username
+      const body = {
+        id: row,
+        title: inputTask.value,
+        task: inputDescription.value,
+        state: inputState.value,
+        priority: inputPriority.value,
+        username
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/tasks/${row}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${getToken()}`
+          },
+          body: JSON.stringify(body)
+        })
+
+        if (response.ok) {
+          setOnUpdate((prev: boolean) => !prev)
+        } else {
+          console.error('Failed to create task', await response.json())
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
     }
-
-    fetch(`http://127.0.0.1:8000/tasks/${row}/`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${getToken()}`
-      },
-      body: JSON.stringify(body)
-    }).then(() => setOnUpdate((prev) => !prev))
   }
 
   return (
     <>
-      {currentClick.includes(row) ? null : <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleEdition}>Edit</button>}
+      {currentClick.includes(row) === null
+        ? null
+        : (
+          <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleEdition}>
+            Edit
+          </button>
+          )}
       {
-        currentClick.includes(row)
-          ? (
+        currentClick.includes(row) === null
+          ? null
+          : (
             <>
-              <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleOk}>OK</button>
+              <button
+                className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition'
+                onClick={() => { handleOk().catch(() => { }) }}
+              >
+                OK
+              </button>
               <button className='text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleCancel}>cancel</button>
             </>)
-          : null
       }
     </>
   )
 }
-
-const ListTasks = () => {
+interface RowData {
+  id: number
+  title: string
+  task: string
+  state: 'In progress' | 'Done' | 'Pending'
+  priority: 'High' | 'Medium' | 'Low'
+}
+const ListTasks = (): ReactElement => {
   const [selectedItems, setSelectedItems] = useState({})
-  const [onUpdate, setOnUpdate] = useState(false)
-  const [currentClick, setCurrentClick] = useState([])
-  const navigate = useNavigate()
+  const [currentClick, setCurrentClick] = useState<number[]>([])
 
-  const handleDeleted = () => {
-    selectedItems.map((data) => {
-      fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
+  const handleDeleted = async (): Promise<void> => {
+    const deletePromises = selectedItems.map(async (data: { id: number }) =>
+      await fetch(`http://127.0.0.1:8000/tasks/${data.id}/`, {
         method: 'DELETE',
         headers: {
           'X-CSRFtoken': getCsrfToken(),
           Authorization: `Token ${getToken()}`
         }
-      }).then(
-        () => setOnUpdate((prev) => !prev)
-      )
-    })
+      }).catch((error) => {
+        console.error(`Failed to delete task ${data.id}:`, error)
+      })
+    )
+
+    return Promise.all(deletePromises).then(() => { })
   }
 
   const columns = [
     {
       name: 'Task',
-      cell: row =>
+      cell: (row: RowData) =>
         (
-          <>{currentClick.includes(row.id) ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Task`} type='text' defaultValue={row.title} /> : row.title}</>
+          <>{currentClick.includes(row.id) !== null ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Task`} type='text' defaultValue={row.title} /> : row.title}</>
         )
 
     },
     {
       name: 'Description',
-      cell: row => (
-        <>{currentClick.includes(row.id) ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Description`} type='text' defaultValue={row.task} /> : row.task}</>
+      cell: (row: RowData) => (
+        <>{currentClick.includes(row.id) !== null ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Description`} type='text' defaultValue={row.task} /> : row.task}</>
       )
     },
     {
       name: 'State',
-      cell: row => (
+      cell: (row: RowData) => (
         <>
-          {currentClick.includes(row.id)
-            ? <select defaultValue={row.state} className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}State`}>
-              <option value='In progress'>In progress</option>
-              <option value='Done'>Done</option>
-              <option value='Pending' selected>Pending</option>
-
-            </select>
+          {currentClick.includes(row.id) !== null
+            ? (
+              <select
+                defaultValue={row.state}
+                className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500'
+                id={`${row.id}State`}
+              >
+                <option value='In progress'>In progress</option>
+                <option value='Done'>Done</option>
+                <option value='Pending' selected>Pending</option>
+              </select>
+              )
             : row.state}
         </>
       )
     },
     {
       name: 'Priority',
-      cell: row => (
+      cell: (row: RowData) => (
         <>
-          {currentClick.includes(row.id)
-            ? <select defaultValue={row.priority} className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Priority`}>
-              <option value='High'>High</option>
-              <option value='Medium'>Medium</option>
-              <option value='Low' selected>Low</option>
+          {currentClick.includes(row.id) !== null
+            ? (
+              <select
+                defaultValue={row.priority}
+                className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500'
+                id={`${row.id}Priority`}
+              >
+                <option value='High'>High</option>
+                <option value='Medium'>Medium</option>
+                <option value='Low' selected>Low</option>
 
-            </select>
+              </select>
+              )
             : row.priority}
         </>
       )
     },
     {
       name: 'Actions',
-      cell: row => (
+      cell: (row: RowData) => (
         <TableActions
           row={row.id}
           currentClick={currentClick}
@@ -140,14 +180,14 @@ const ListTasks = () => {
         <div className='ml-8'>
           <button
             className='bg-sky-600 text-white p-2 py-1 text-white rounded-md hover:bg-blue-700 transition'
-            onClick={handleDeleted}
+            onClick={() => { handleDeleted().catch(() => { }) }}
           >Delete tasks
           </button>
         </div>
         <div className='ml-4'>
           <button
             className='bg-sky-600 text-white p-2 py-1 text-white rounded-md hover:bg-blue-700 transition'
-            onClick={() => { navigate('/add-task') }}
+            onClick={() => { <Navigate to='/add-task' replace /> }}
           >Add tasks
           </button>
         </div>

@@ -1,6 +1,7 @@
+import { ReactElement } from 'react'
 import { TableAdmin } from '../../components/TableAdmin'
 
-const Admin = () => {
+const Admin = (): ReactElement => {
   const columns = [
     {
       name: 'Task',
