@@ -1,23 +1,31 @@
+import { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-export function Registration () {
+export function Registration (): ReactElement {
   const { register, handleSubmit } = useForm()
   const navigate = useNavigate()
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     if (data.password === data.repeat_password) {
-      fetch('http://127.0.0.1:8000/user/registration/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: data.username,
-          password: data.password,
-          email: data.email,
-          first_name: data.first_name,
-          last_name: data.last_name
+      try {
+        const response = await fetch('http://127.0.0.1:8000/user/registration/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: data.username,
+            password: data.password,
+            email: data.email,
+            first_name: data.first_name,
+            last_name: data.last_name
+          })
         })
-      })
-        .then(async () => await navigate('/login', { replace: true }))
+
+        if (response.ok) {
+          await navigate('/login', { replace: true })
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
     }
   })
 
@@ -25,8 +33,8 @@ export function Registration () {
     <div className='min-h-screen flex items-center justify-center bg-gray-100'>
       <div className='bg-white p-8 shadow-lg rounded-xl w-96'>
         <h1 className='text-2xl font-bold text-center mb-8'>Registration</h1>
-        <form onSubmit={onSubmit}>
-          <label className='block  font-medium' htmlFor='task' htmlFor='first_name'>
+        <form onSubmit={(e) => { onSubmit(e).catch(() => { }) }}>
+          <label className='block  font-medium' htmlFor='first_name'>
             First Name
           </label>
           <input
@@ -38,7 +46,7 @@ export function Registration () {
             })}
           />
 
-          <label className='block  font-medium' htmlFor='task' htmlFor='last_name'>
+          <label className='block  font-medium' htmlFor='last_name'>
             Last Name
           </label>
           <input
@@ -50,7 +58,7 @@ export function Registration () {
             })}
           />
 
-          <label className='block  font-medium' htmlFor='task' htmlFor='username'>
+          <label className='block  font-medium' htmlFor='username'>
             Username
           </label>
           <input
@@ -62,7 +70,7 @@ export function Registration () {
             })}
           />
 
-          <label className='block  font-medium' htmlFor='task' htmlFor='email'>
+          <label className='block  font-medium' htmlFor='email'>
             Email
           </label>
           <input
@@ -74,7 +82,7 @@ export function Registration () {
             })}
           />
 
-          <label className='block  font-medium' htmlFor='task' htmlFor='password'>
+          <label className='block  font-medium' htmlFor='password'>
             Password
           </label>
           <input
@@ -86,7 +94,7 @@ export function Registration () {
             })}
           />
 
-          <label className='block  font-medium' htmlFor='task' htmlFor='repeat-password'>
+          <label className='block  font-medium' htmlFor='repeat-password'>
             Repeat password
           </label>
           <input

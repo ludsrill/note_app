@@ -1,7 +1,15 @@
 import { ReactElement } from 'react'
-import { Navigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 const Home = (): ReactElement => {
+  const navigate = useNavigate()
+  const handleNavigation = async (page: string): Promise<void> => {
+    try {
+      await navigate(page)
+    } catch (error) {
+      console.error('Navigation impossible')
+    }
+  }
+
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col'>
       <header className='bg-sky-600 text-white py-8 shadow-md'>
@@ -18,10 +26,17 @@ const Home = (): ReactElement => {
             Login or Register to start organizing your daily activities
           </p>
           <div className='flex justify-center space-x-4'>
-            <button onClick={() => { <Navigate to='/login' replace /> }} className='bg-sky-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl'>
+            <button
+              onClick={() => { handleNavigation('/login').catch(() => { }) }}
+              className='bg-sky-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl'
+            >
               Login
             </button>
-            <button onClick={() => { <Navigate to='/registration' replace /> }} variant='outline' className='px-6 py-2 rounded-xl hover:bg-gray-200'>
+            <button
+              onClick={() => { handleNavigation('/registration').catch(() => { }) }}
+              variant='outline'
+              className='px-6 py-2 rounded-xl hover:bg-gray-200'
+            >
               Register
             </button>
           </div>

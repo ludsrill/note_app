@@ -1,3 +1,4 @@
+
 function getToken (): string {
   return document.cookie
     .split('; ')

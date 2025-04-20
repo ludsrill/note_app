@@ -1,14 +1,15 @@
 import { useContext, useState, ReactElement } from 'react'
 import { Table } from '../../components/Table'
-import { getCsrfToken, getToken } from '../../utils/utils'
+import { getCsrfToken, getToken, handleNavigation } from '../../utils/utils'
 import { AuthContext } from '../../context/Authcontext'
-import { Navigate } from 'react-router-dom'
 
 const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }): ReactElement => {
   const { username } = useContext(AuthContext)
+
   const handleEdition = (): void => {
     setCurrentClick((prev) => [...prev, row])
   }
+
   const handleCancel = (): void => {
     setCurrentClick((prev) => [...prev].filter(value => value !== row))
   }
@@ -187,7 +188,11 @@ const ListTasks = (): ReactElement => {
         <div className='ml-4'>
           <button
             className='bg-sky-600 text-white p-2 py-1 text-white rounded-md hover:bg-blue-700 transition'
-            onClick={() => { <Navigate to='/add-task' replace /> }}
+            onClick={
+              () => {
+                handleNavigation('/add-task').catch()
+              }
+            }
           >Add tasks
           </button>
         </div>
