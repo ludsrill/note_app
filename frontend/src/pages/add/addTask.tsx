@@ -1,5 +1,6 @@
+import { ReactElement } from 'react'
 import { AddForm } from '../../components/AddForm'
-function AddTask () {
+function AddTask (): ReactElement {
   return (
     <>
       <AddForm />
