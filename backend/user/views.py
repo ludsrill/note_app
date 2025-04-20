@@ -49,6 +49,6 @@ class UserLoginAPIView(generics.CreateAPIView):
             secure=True,
             value=token.key,
             max_age=3600,
-            samesite=None,
+            samesite="None",
         )
         return response
