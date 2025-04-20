@@ -1,36 +1,40 @@
 import { useForm } from 'react-hook-form'
 import { getCsrfToken } from '../../utils/utils'
-import { useContext, useState } from 'react'
+import { ReactElement, useContext, useState } from 'react'
 import { AuthContext } from '../../context/Authcontext'
 import { useNavigate } from 'react-router-dom'
 import FloatingMessage from '../../components/FloatingText'
 
-export default function LoginPage () {
+export default function LoginPage (): ReactElement {
   const { register, handleSubmit } = useForm()
   const { dispatch } = useContext(AuthContext)
   const [loginState, setLoginState] = useState(0)
   const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (data) => {
-    const response = await fetch('http://127.0.0.1:8000/user/login/', {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': getCsrfToken(),
-        'Content-type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        username: data.username,
-        password: data.password
+    try {
+      const response = await fetch('http://127.0.0.1:8000/user/login/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCsrfToken(),
+          'Content-type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password
+        })
       })
-    })
 
-    if (response.ok) {
-      dispatch({ type: 'LOGIN', payload: data.username })
-      navigate('/list')
-      setLoginState(0)
-    } else {
-      setLoginState((prev) => prev + 1)
+      if (response.ok) {
+        dispatch({ type: 'LOGIN', payload: data.username })
+        await navigate('/list')
+        setLoginState(0)
+      } else {
+        setLoginState((prev) => prev + 1)
+      }
+    } catch (error) {
+      console.error('Error:', error)
     }
   })
 
@@ -39,7 +43,7 @@ export default function LoginPage () {
       <div className='min-h-screen flex items-center justify-center bg-gray-100'>
         <div className='bg-white p-8 shadow-lg rounded-xl w-96'>
           <h1 className='text-2xl font-bold text-center mb-8'>Login</h1>
-          <form onSubmit={onSubmit} className='space-y-4'>
+          <form onSubmit={(e) => { onSubmit(e).catch(() => { }) }} className='space-y-4'>
             <div>
               <label htmlFor='username' className='block  font-medium'>Username</label>
               <input
