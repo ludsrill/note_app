@@ -1,5 +1,5 @@
-import { AddForm } from "../../components/AddForm"
-function AddTask() {
+import { AddForm } from '../../components/AddForm'
+function AddTask () {
   return (
     <>
       <AddForm />
