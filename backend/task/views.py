@@ -46,7 +46,7 @@ class TaskListAdminAPIView(generics.ListAPIView):
     serializer_class = TaskSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
-    pagination_class = None
+    pagination_class = StandardResultsSetPagination
 
 
 class TaskRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
