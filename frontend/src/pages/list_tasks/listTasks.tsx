@@ -1,7 +1,8 @@
 import { useContext, useState, ReactElement } from 'react'
 import { Table } from '../../components/Table'
-import { getCsrfToken, getToken, handleNavigation } from '../../utils/utils'
+import { getCsrfToken, getToken } from '../../utils/utils'
 import { AuthContext } from '../../context/Authcontext'
+import { useNavigate } from 'react-router-dom'
 
 const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }): ReactElement => {
   const { username } = useContext(AuthContext)
@@ -54,24 +55,13 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }): Reac
 
   return (
     <>
-      {currentClick.includes(row) === null
-        ? null
-        : (
-          <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleEdition}>
-            Edit
-          </button>
-          )}
+      {currentClick.includes(row) === true ? null : <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleEdition}>Edit</button>}
       {
-        currentClick.includes(row) === null
+        currentClick.includes(row) === false
           ? null
           : (
             <>
-              <button
-                className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition'
-                onClick={() => { handleOk().catch(() => { }) }}
-              >
-                OK
-              </button>
+              <button className='mr-3 text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={() => { handleOk().catch(() => { }) }}>OK</button>
               <button className='text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleCancel}>cancel</button>
             </>)
       }
@@ -88,6 +78,16 @@ interface RowData {
 const ListTasks = (): ReactElement => {
   const [selectedItems, setSelectedItems] = useState({})
   const [currentClick, setCurrentClick] = useState<number[]>([])
+  const [, setOnUpdate] = useState(false)
+
+  const navigate = useNavigate()
+  const handleNavigation = async (page: string): Promise<void> => {
+    try {
+      await navigate(page)
+    } catch (error) {
+      console.error('Navigation impossible')
+    }
+  }
 
   const handleDeleted = async (): Promise<void> => {
     const deletePromises = selectedItems.map(async (data: { id: number }) =>
@@ -97,6 +97,8 @@ const ListTasks = (): ReactElement => {
           'X-CSRFtoken': getCsrfToken(),
           Authorization: `Token ${getToken()}`
         }
+      }).then(() => {
+        setOnUpdate((prev: boolean) => !prev)
       }).catch((error) => {
         console.error(`Failed to delete task ${data.id}:`, error)
       })
@@ -110,32 +112,27 @@ const ListTasks = (): ReactElement => {
       name: 'Task',
       cell: (row: RowData) =>
         (
-          <>{currentClick.includes(row.id) !== null ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Task`} type='text' defaultValue={row.title} /> : row.title}</>
+          <>{currentClick.includes(row.id) === true ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Task`} type='text' defaultValue={row.title} /> : row.title}</>
         )
 
     },
     {
       name: 'Description',
       cell: (row: RowData) => (
-        <>{currentClick.includes(row.id) !== null ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Description`} type='text' defaultValue={row.task} /> : row.task}</>
+        <>{currentClick.includes(row.id) === true ? <input className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Description`} type='text' defaultValue={row.task} /> : row.task}</>
       )
     },
     {
       name: 'State',
       cell: (row: RowData) => (
         <>
-          {currentClick.includes(row.id) !== null
+          {currentClick.includes(row.id) === true
             ? (
-              <select
-                defaultValue={row.state}
-                className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500'
-                id={`${row.id}State`}
-              >
+              <select defaultValue={row.state} className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}State`}>
                 <option value='In progress'>In progress</option>
                 <option value='Done'>Done</option>
                 <option value='Pending' selected>Pending</option>
-              </select>
-              )
+              </select>)
             : row.state}
         </>
       )
@@ -144,19 +141,14 @@ const ListTasks = (): ReactElement => {
       name: 'Priority',
       cell: (row: RowData) => (
         <>
-          {currentClick.includes(row.id) !== null
+          {currentClick.includes(row.id) === true
             ? (
-              <select
-                defaultValue={row.priority}
-                className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500'
-                id={`${row.id}Priority`}
-              >
+              <select defaultValue={row.priority} className='w-full px-3 py-1 border border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500' id={`${row.id}Priority`}>
                 <option value='High'>High</option>
                 <option value='Medium'>Medium</option>
                 <option value='Low' selected>Low</option>
 
-              </select>
-              )
+              </select>)
             : row.priority}
         </>
       )
@@ -189,9 +181,7 @@ const ListTasks = (): ReactElement => {
           <button
             className='bg-sky-600 text-white p-2 py-1 text-white rounded-md hover:bg-blue-700 transition'
             onClick={
-              () => {
-                handleNavigation('/add-task').catch()
-              }
+              () => { handleNavigation('/add-task').catch(() => { }) }
             }
           >Add tasks
           </button>
