@@ -1,21 +1,42 @@
 import DataTable from 'react-data-table-component'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactElement } from 'react'
 import { getToken } from '../utils/utils'
 
-export const TableAdmin = ({ columns, setItems }) => {
-  const handleSelection = (data) => {
-    setItems(data.selectedRows)
-  }
+export const TableAdmin = ({ columns }): ReactElement => {
   const [data, setData] = useState([])
+  const [totalRows, setTotalRows] = useState(0)
+
+  const fetchUsers = async (page: number): Promise<void> => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/tasks/admin/?page=${page}`, {
+        method: 'GET',
+        headers: { Authorization: `Token ${getToken()}` }
+      })
+
+      const responseData = await response.json()
+
+      if (response.ok) {
+        setData(responseData.results)
+        setTotalRows(responseData.count)
+        await navigate('/list', { replace: true })
+      } else {
+        console.error('Failed to create task', responseData)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
+  const handlePageChange = async (page: number): Promise<void> => {
+    await fetchUsers(page)
+  }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/tasks/admin/', {
-      method: 'GET',
-      headers: { Authorization: `Token ${getToken()}` }
-    }).then(async (response) => await response.json())
-      .then((response) => {
-        setData(response)
-      })
+    (async () => {
+      await fetchUsers(1)
+    })().catch((error) => {
+      console.error('Error in fetchUsers:', error)
+    })
   }, [])
 
   console.log(data)
@@ -100,8 +121,13 @@ export const TableAdmin = ({ columns, setItems }) => {
         columns={columns}
         data={data}
         selectableRows
-        onSelectedRowsChange={handleSelection}
         customStyles={customStyles}
+        pagination
+        paginationServer
+        paginationPerPage={5}
+        paginationTotalRows={totalRows}
+        onChangePage={(e) => { handlePageChange(e).catch(() => { }) }}
+        paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 50]}
       />
     </>
 

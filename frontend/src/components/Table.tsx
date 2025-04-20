@@ -38,7 +38,7 @@ export const Table = ({ columns, setItems }): ReactElement => {
 
   useEffect(() => {
     (async () => {
-      await fetchUsers('1')
+      await fetchUsers(1)
     })().catch((error) => {
       console.error('Error in fetchUsers:', error)
     })
