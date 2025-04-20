@@ -1,4 +1,4 @@
-
+import React from 'react'
 import AddTask from './pages/add/addTask'
 import { Registration } from './pages/registration/registration'
 import LoginPage from './pages/login/login'
@@ -9,7 +9,8 @@ import NavBar from './components/Navbar'
 
 import { RedirectLogin, RedirectNoLogin } from './pages/login/redirectIsAuthenticated'
 import Admin from './pages/admin-dashboard/adminDashboard'
-function App () {
+
+function App (): JSX.Element {
   return (
     <Router>
       <NavBar />
