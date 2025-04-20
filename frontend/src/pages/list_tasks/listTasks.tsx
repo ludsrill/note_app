@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Table } from '../../components/Table'
 import { getCsrfToken, getToken } from '../../utils/utils'
 import { AuthContext } from '../../context/Authcontext'
@@ -50,7 +50,7 @@ const TableActions = ({ row, setCurrentClick, currentClick, setOnUpdate }) => {
               <button className='text-right bg-sky-600 text-white p-2 py-1 text-white rounded-sm hover:bg-blue-700 transition' onClick={handleCancel}>cancel</button>
             </>)
           : null
-}
+      }
     </>
   )
 }
@@ -100,7 +100,7 @@ const ListTasks = () => {
               <option value='Done'>Done</option>
               <option value='Pending' selected>Pending</option>
 
-              </select>
+            </select>
             : row.state}
         </>
       )
@@ -115,7 +115,7 @@ const ListTasks = () => {
               <option value='Medium'>Medium</option>
               <option value='Low' selected>Low</option>
 
-              </select>
+            </select>
             : row.priority}
         </>
       )

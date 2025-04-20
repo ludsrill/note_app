@@ -1,10 +1,16 @@
-import { useReducer, createContext, useEffect } from 'react'
+import { useReducer, createContext, useEffect, ReactElement } from 'react'
 
-const initialState = {
-  username: JSON.parse(localStorage.getItem('username')) || null
+interface State {
+  username: string | null
 }
 
-export const authReducer = (state, action) => {
+const initialState: State = {
+  username: localStorage.getItem('username') !== null
+    ? JSON.parse(localStorage.getItem('username'))
+    : null
+}
+
+export const authReducer = (state, action): State => {
   switch (action.type) {
     case 'LOGIN':
       return { username: action.payload }
@@ -19,10 +25,10 @@ export const authReducer = (state, action) => {
 
 export const AuthContext = createContext()
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }): ReactElement => {
   const [state, dispatch] = useReducer(authReducer, initialState)
   useEffect(() => {
-    if (state.username) {
+    if (state.username !== null) {
       localStorage.setItem('username', JSON.stringify(state.username))
     } else {
       localStorage.removeItem('username')
