@@ -19,7 +19,6 @@ This project combines both backend and frontend technologies to deliver a robust
 - User registration and login.
 - Task CRUD (Create, Read, Update, Delete).
 - User-based access control.
-- Modern and responsive UI.
 - Integrated pagination for task lists.
 
 ## 📚 Project Goal
